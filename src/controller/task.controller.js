@@ -1,16 +1,15 @@
-import { where } from "sequelize";
-import { taskModel } from "../model/task.model.js";
+const { taskModel } = require('../model/task.model');
 
-export const getAllTasks = async (req, res) => {
+const getAllTasks = async (req, res) => {
   try {
     const tasks = await taskModel.findAll();
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener las tareas", error });
   }
-}; 
+};
 
-export const getTaskById = async (req, res) => {
+const getTaskById = async (req, res) => {
   try {
     const { id } = req.params;
     const task = await taskModel.findByPk(id);
@@ -23,19 +22,20 @@ export const getTaskById = async (req, res) => {
   }
 };
 
-export const createTask = async (req, res) => {
+const createTask = async (req, res) => {
   try {
     const { title, description, status } = req.body;
     if (!title || !description) {
       return res.status(400).json({ message: "Los campos título y descripción son obligatorios" });
     }
     const newTask = await taskModel.create({ title, description, status });
-    res.status(201).json({ message: "Tarea creada exitosamente", newTask });
+    res.status(201).json({ message: "Tarea creada exitosamente", task: newTask });
   } catch (error) {
     res.status(500).json({ message: "Error al crear la tarea", error });
   }
 };
-export const updateTask = async (req, res) => {
+
+const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, status } = req.body;
@@ -50,3 +50,24 @@ export const updateTask = async (req, res) => {
   }
 };
 
+const deleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const task = await taskModel.findByPk(id);
+    if (!task) {
+      return res.status(404).json({ message: "Tarea no encontrada" });
+    }
+    await task.destroy();
+    res.status(200).json({ message: "Tarea eliminada exitosamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar la tarea", error });
+  }
+};
+
+module.exports = {
+  getAllTasks,
+  getTaskById,
+  createTask,
+  updateTask,
+  deleteTask
+};

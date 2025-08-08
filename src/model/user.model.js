@@ -1,23 +1,26 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.js";
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/database.js");
 
-export const userModel = sequelize.define("User", {
+const taskModel = sequelize.define("Task", {
     id: {
     type: DataTypes.INTEGER,
+    primaryKey: true,
     autoIncrement: true,
-    primaryKey: true, 
     },
-    name: {
+    title: { 
     type: DataTypes.STRING(100),
-    allowNull: false,
-    }, 
-    email: {
-    type: DataTypes.STRING(100), 
     allowNull: false,
     unique: true,
-    }, 
-    password: {
+  },
+  description: {
     type: DataTypes.STRING(100),
     allowNull: false,
-    },  
+    unique: true,
+  },
+  isComplete: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });
+
+module.exports = { taskModel };

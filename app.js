@@ -12,5 +12,5 @@ const userRoutes = require('./src/routes/user.routes');
 app.use('/users', userRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+  console.log(`Servidor corriendo correctamente`);
 });
